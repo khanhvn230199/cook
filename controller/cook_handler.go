@@ -75,7 +75,7 @@ func UpdateTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": task})
 }
 
-func FindCookByName(c *gin.Context) { // Get model if exist
+func FindCookByName(c *gin.Context) {
 	var cook []models.Cook
 	id := c.Request.URL.Query().Get("ingredient")
 	p := models.GeneratePaginationFromRequest(c)
@@ -88,5 +88,17 @@ func FindCookByName(c *gin.Context) { // Get model if exist
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": cook})
+
+}
+
+func FindNameCook(c *gin.Context) {
+	var task models.Cook
+	id := c.Request.URL.Query().Get("name")
+	if err := models.DB.Where("name = ?", id).First(&task).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": task})
 
 }

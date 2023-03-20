@@ -16,5 +16,6 @@ func main() {
 	r.GET("/api/tasks/one", controller.FindTask)
 	r.PUT("/api/tasks/update", controller.UpdateTask)
 	r.GET("/api/cook", controller.FindCookByName)
+	r.GET("/api/cooks", controller.FindNameCook)
 	r.Run()
 }
