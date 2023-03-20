@@ -78,9 +78,11 @@ func UpdateTask(c *gin.Context) {
 func FindCookByName(c *gin.Context) { // Get model if exist
 	var cook []models.Cook
 	id := c.Request.URL.Query().Get("ingredient")
+	p := models.GeneratePaginationFromRequest(c)
 	res := strings.Replace(id, ",", "%%", -1)
+	offset := (p.Page - 1) * p.Limit
 
-	if err := models.DB.Where("ingredient LIKE ?", fmt.Sprintf("%%%s%%", res)).Find(&cook).Error; err != nil {
+	if err := models.DB.Limit(p.Limit).Offset(offset).Where("ingredient LIKE ?", fmt.Sprintf("%%%s%%", res)).Find(&cook).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
